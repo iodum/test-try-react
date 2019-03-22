@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 
-class Article extends Component {
+class Article extends PureComponent {
     // state = {
     //     isOpen: this.props.defaultOpen
     // }
@@ -9,24 +9,28 @@ class Article extends Component {
         super(props)
 
         this.state = {
-            isOpen: props.defaultOpen
+            isOpen: props.defaultOpen,
+            count: 0
         }
     }
 
     componentWillMount() {
-        console.log('componentWillMount');
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('componentWillReceiveProps');
         if (nextProps.defaultOpen !== this.props.defaultOpen) this.setState({
             isOpen: nextProps.defaultOpen
         })
     }
 
     componentWillUpdate(nextProps, nextState) {
-        console.log('componentWillUpdate');
+        console.log('---','componentWillUpdate');
     }
+
+    // shouldComponentUpdate is realized in PureComponent
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return this.state.isOpen !== nextState.isOpen
+    // }
 
     render() {
         const {article} = this.props
@@ -34,7 +38,8 @@ class Article extends Component {
         return (
             <div className="card mx-auto" style={{width:'50%'}}>
                 <div className="card-header">
-                    <h2>
+                    <h2 onClick = {this.incrementCounrer}>
+                        cliked {this.state.count}
                         {article.title}
                         <button onClick={this.handleClick} className="btn btn-primary btn-sm float-right">{this.state.isOpen ? 'close' : 'open'}</button>
                     </h2>
@@ -45,6 +50,12 @@ class Article extends Component {
                 </div>
             </div>
         )
+    }
+
+    incrementCounrer = () => {
+        this.setState({
+            count: this.state.count + 1
+        })
     }
 
     handleClick = () => {
